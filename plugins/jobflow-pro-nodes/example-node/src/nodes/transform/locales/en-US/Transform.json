@@ -1,0 +1,22 @@
+{
+  "jfpdemo-transform": {
+    "label": {
+      "name": "Name",
+      "suffix": "Appended text"
+    },
+    "placeholder": {
+      "name": "Leave blank to use the node type",
+      "suffix": "Text appended to the incoming file"
+    },
+    "tips": {
+      "placement": "Place after a hot folder or drop zone. The step appears in job details once a JobFlow Pro node runs later in the flow."
+    },
+    "status": {
+      "working": "Transforming...",
+      "done": "Transformed"
+    },
+    "error": {
+      "transformFailed": "Transform failed"
+    }
+  }
+}

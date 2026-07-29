@@ -1,0 +1,33 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "jobflow-pro-partner-kit",
+  "metadata": {
+    "description": "Claude Skills for building Node-RED nodes that behave natively in Fiery JobFlow Pro. Two skills and a complete runnable example package."
+  },
+  "owner": {
+    "name": "Hans Sep",
+    "url": "https://github.com/hanssep"
+  },
+  "plugins": [
+    {
+      "name": "jobflow-pro-nodes",
+      "description": "Build Node-RED nodes that appear in the Fiery JobFlow Pro Jobs dashboard. The integration contract, Node-RED development craft, and a four-node reference package with tests.",
+      "version": "1.0.0",
+      "author": {
+        "name": "Hans Sep",
+        "url": "https://github.com/hanssep"
+      },
+      "source": "./plugins/jobflow-pro-nodes",
+      "homepage": "https://github.com/hanssep/jobflow-pro-partner-kit",
+      "category": "development",
+      "tags": [
+        "node-red",
+        "jobflow-pro",
+        "fiery",
+        "print",
+        "prepress",
+        "skills"
+      ]
+    }
+  ]
+}

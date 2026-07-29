@@ -1,0 +1,27 @@
+<script type="text/markdown" data-help-name="jfpdemo-server-config">
+# Server Config
+
+## What This Does
+Holds the connection details other nodes need to reach a downstream server: a
+host, a port, and an API key. It is a CONFIG node — it never appears on the
+canvas as a wired step, only as a dropdown selection on the nodes that use
+it.
+
+## Why the API Key Is Separate
+The API key is registered as a **credential**, not a regular property.
+Node-RED encrypts credentials at rest and strips them out of any flow export
+or copy/paste — the only field on this node that gets that protection. Never
+put a secret in a regular configuration field; it is stored as plain text in
+the flow file.
+
+## Test Connection
+The "Test connection" button in the edit dialog performs a real TCP
+reachability check against host:port. It only works after the config node
+has been deployed at least once — before that, the runtime has no record of
+this node's id to test against, and the button reports "Deploy first, then
+test".
+
+## Outside JobFlow Pro
+This node has no JobFlow Pro dependency; it is a plain Node-RED config node
+pattern usable in any package.
+</script>

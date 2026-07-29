@@ -1,0 +1,42 @@
+<script type="text/markdown" data-help-name="jfpdemo-route">
+# Route
+
+## What This Does
+Tests one or more rules against the incoming message and sends it out the
+output for the first matching rule — or every matching rule, if configured
+that way. Demonstrates a node whose number of outputs is driven by its
+configuration, and how to resolve a TypedInput field at runtime.
+
+## When to Use This
+- As the model for any node whose port count depends on its configuration
+- As the model for resolving a msg/flow/global/env field safely with
+  `RED.util.evaluateNodeProperty`
+- As the model for fanning one message out to several outputs without the
+  outputs aliasing each other
+
+## Configuration
+- **Rules** — each rule tests a property (defaults to `msg.filename`)
+  against a value with **equals** or **contains**, and carries a label used
+  for its output
+- **Send to every matching output** — off: the first matching rule wins. On:
+  the message is sent to every output whose rule matches
+
+## Inputs
+- `msg` (Object): whatever property each rule points at is read off this
+  message; `msg.jobflow` is used to record which rule matched, if present
+
+## Outputs
+One output per rule, in the order configured, plus a final **no match**
+output for messages that match nothing.
+
+## Fan-out and Message Identity
+When a message matches more than one rule with "send to every matching
+output" on, only the first output receives the original message object —
+every output after that receives an independent clone. Mutating the message
+on one wire never affects another.
+
+## Outside JobFlow Pro
+The routing works identically. Job tracking (a step per routed message,
+recording which rule matched) is skipped when there is no job on the
+message.
+</script>

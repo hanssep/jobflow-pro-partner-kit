@@ -1,0 +1,53 @@
+<!--
+  Editor template for jfpdemo-validate.
+  Two outputs, labelled so the canvas explains itself without opening the node.
+-->
+<script type="text/javascript">
+  // Every node's editor script executes in the same global (window) scope as
+  // every other node's editor script loaded in this instance of the editor.
+  // A bare top-level function or var here can collide with one from another
+  // package that happens to pick the same name — wrapping the whole file in
+  // an IIFE keeps everything below private to this file.
+  (function () {
+  RED.nodes.registerType('jfpdemo-validate', {
+    category: 'JFP demo',
+    color: '#007FDA',
+    defaults: {
+      name: { value: '' },
+      maxBytes: { value: '1048576', validate: RED.validators.number() },
+    },
+    inputs: 1,
+    outputs: 2,
+    outputLabels: function (index) {
+      return index === 0
+        ? this._('jfpdemo-validate.output.passed')
+        : this._('jfpdemo-validate.output.rejected');
+    },
+    icon: 'font-awesome/fa-check',
+    paletteLabel: 'validate',
+    label: function () {
+      return this.name || 'validate';
+    },
+  });
+  })();
+</script>
+
+<script type="text/html" data-template-name="jfpdemo-validate">
+  <div class="form-row">
+    <label for="node-input-name">
+      <i class="fa fa-tag"></i> <span data-i18n="jfpdemo-validate.label.name"></span>
+    </label>
+    <input type="text" id="node-input-name" data-i18n="[placeholder]jfpdemo-validate.placeholder.name" />
+  </div>
+
+  <div class="form-row">
+    <label for="node-input-maxBytes">
+      <i class="fa fa-balance-scale"></i> <span data-i18n="jfpdemo-validate.label.maxBytes"></span>
+    </label>
+    <input type="text" id="node-input-maxBytes" data-i18n="[placeholder]jfpdemo-validate.placeholder.maxBytes" />
+  </div>
+
+  <div class="form-tips">
+    <span data-i18n="jfpdemo-validate.tips.outcome"></span>
+  </div>
+</script>

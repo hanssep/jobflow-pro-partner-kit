@@ -1,0 +1,27 @@
+{
+  "jfpdemo-server-config": {
+    "label": {
+      "name": "Name",
+      "host": "Host",
+      "port": "Port",
+      "apiKey": "API key"
+    },
+    "placeholder": {
+      "name": "Leave blank to use the node type",
+      "host": "printserver.example.com",
+      "apiKey": "Stored encrypted, never exported with the flow"
+    },
+    "button": {
+      "test": "Test connection"
+    },
+    "status": {
+      "testing": "Testing...",
+      "ok": "Reachable",
+      "fail": "Unreachable",
+      "deployFirst": "Deploy first, then test"
+    },
+    "tips": {
+      "credentials": "The API key is stored encrypted and is never included when a flow is exported or shared."
+    }
+  }
+}

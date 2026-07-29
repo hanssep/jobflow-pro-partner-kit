@@ -1,0 +1,173 @@
+<!--
+  Editor template for jfpdemo-route.
+
+  Shows two things Transform/Validate do not:
+   - a node whose output count is configured, not fixed (see the hidden
+     `outputs` field near the bottom of the template)
+   - an editableList of rules, each with its own TypedInput property picker
+-->
+<script type="text/javascript">
+  // Every node's editor script executes in the same global (window) scope as
+  // every other node's editor script loaded in this instance of the editor.
+  // A bare top-level function or var here can collide with one from another
+  // package that happens to pick the same name — wrapping the whole file in
+  // an IIFE keeps everything below private to this file.
+  (function () {
+    /** Build one row of the rules editableList. */
+    function addRuleRow(node, container, data) {
+      data = data || {};
+
+      const row = $('<div/>').css({ overflow: 'hidden', whiteSpace: 'nowrap' }).appendTo(container);
+
+      const propertyField = $('<input/>', { type: 'text' })
+        .css({ width: '40%', marginRight: '5px' })
+        .appendTo(row)
+        .typedInput({ types: ['msg', 'str'], default: 'msg' });
+      propertyField.typedInput('type', data.propertyType || 'msg');
+      propertyField.typedInput('value', data.property !== undefined ? data.property : 'filename');
+
+      const operatorField = $('<select/>').css({ width: '110px', marginRight: '5px' }).appendTo(row);
+      operatorField.append(
+        $('<option/>', { value: 'equals', text: node._('jfpdemo-route.operator.equals') }),
+      );
+      operatorField.append(
+        $('<option/>', { value: 'contains', text: node._('jfpdemo-route.operator.contains') }),
+      );
+      operatorField.val(data.operator || 'equals');
+
+      const valueField = $('<input/>', { type: 'text' })
+        .css({ width: '20%', marginRight: '5px' })
+        .appendTo(row)
+        .val(data.value || '');
+
+      const labelField = $('<input/>', { type: 'text' })
+        .css({ width: '20%' })
+        .attr('placeholder', node._('jfpdemo-route.placeholder.label'))
+        .appendTo(row)
+        .val(data.label || '');
+
+      // Stash the live field handles on the CONTAINER element —
+      // editableList('items') returns exactly these container elements, so
+      // oneditsave can read the handles back without re-parsing the DOM.
+      // (Data set on the inner row div would be invisible to 'items'.)
+      container.data('jfpdemoRoute', { propertyField, operatorField, valueField, labelField });
+    }
+
+    RED.nodes.registerType('jfpdemo-route', {
+      category: 'JFP demo',
+      color: '#007FDA',
+      defaults: {
+        name: { value: '' },
+        rules: {
+          value: [],
+          validate: function (v) {
+            // Instances deployed before this property existed have it
+            // undefined; a strict validator would mark every one of them
+            // invalid the next time its flow loads.
+            if (v === undefined) return true;
+            return Array.isArray(v);
+          },
+        },
+        sendAllMatches: { value: false },
+        // Bound to the hidden #node-input-outputs field below. This is the
+        // node's actual, per-instance port count once configured.
+        outputs: { value: 1 },
+      },
+      inputs: 1,
+      // Initial port count for a freshly dropped node, before any rules
+      // exist: just the fixed "no match" output.
+      outputs: 1,
+      icon: 'font-awesome/fa-random',
+      paletteLabel: 'route',
+      label: function () {
+        return this.name || 'route';
+      },
+      outputLabels: function (index) {
+        const rules = this.rules || [];
+        if (index < rules.length) {
+          return rules[index].label || `${this._('jfpdemo-route.label.rule')} ${index + 1}`;
+        }
+        return this._('jfpdemo-route.output.noMatch');
+      },
+      oneditprepare: function () {
+        const node = this;
+        const list = $('#node-input-rule-container')
+          .css({ minHeight: '150px', minWidth: '450px' })
+          .editableList({
+            addItem: function (container, index, data) {
+              addRuleRow(node, container, data);
+            },
+            removable: true,
+            sortable: true,
+            addButton: node._('jfpdemo-route.button.addRule'),
+          });
+
+        const rules = node.rules || [];
+        if (rules.length === 0) {
+          list.editableList('addItem', {});
+        } else {
+          for (let i = 0; i < rules.length; i++) {
+            list.editableList('addItem', rules[i]);
+          }
+        }
+      },
+      oneditsave: function () {
+        const node = this;
+        const rules = [];
+
+        $('#node-input-rule-container')
+          .editableList('items')
+          .each(function () {
+            const fields = $(this).data('jfpdemoRoute');
+            rules.push({
+              property: fields.propertyField.typedInput('value'),
+              propertyType: fields.propertyField.typedInput('type'),
+              operator: fields.operatorField.val(),
+              value: fields.valueField.val(),
+              label: fields.labelField.val(),
+            });
+          });
+
+        node.rules = rules;
+        // The hidden outputs field is how a node changes its port count —
+        // Node-RED redraws the node's ports from this value once the
+        // dialog closes.
+        node.outputs = rules.length + 1;
+        $('#node-input-outputs').val(node.outputs);
+      },
+    });
+  })();
+</script>
+
+<script type="text/html" data-template-name="jfpdemo-route">
+  <div class="form-row">
+    <label for="node-input-name">
+      <i class="fa fa-tag"></i> <span data-i18n="jfpdemo-route.label.name"></span>
+    </label>
+    <input type="text" id="node-input-name" data-i18n="[placeholder]jfpdemo-route.placeholder.name" />
+  </div>
+
+  <div class="form-row">
+    <label><i class="fa fa-list"></i> <span data-i18n="jfpdemo-route.label.rules"></span></label>
+  </div>
+  <div class="form-row node-input-rule-container-row">
+    <ol id="node-input-rule-container"></ol>
+  </div>
+
+  <div class="form-row">
+    <input type="checkbox" id="node-input-sendAllMatches" style="display: inline-block; width: auto; vertical-align: top;" />
+    <label for="node-input-sendAllMatches" style="width: auto;" data-i18n="jfpdemo-route.label.sendAllMatches"></label>
+  </div>
+
+  <!--
+    The hidden outputs field is how this node reports its port count to
+    Node-RED. oneditsave sets it to rules.length + 1 (one output per rule
+    plus the fixed "no match" output); Node-RED reads it back to redraw
+    the node's ports after the dialog closes.
+  -->
+  <input type="hidden" id="node-input-outputs" />
+
+  <div class="form-tips">
+    <span data-i18n="jfpdemo-route.tips.noMatch"></span>
+  </div>
+</script>

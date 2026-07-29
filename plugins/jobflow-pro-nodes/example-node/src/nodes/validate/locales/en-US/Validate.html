@@ -1,0 +1,31 @@
+<script type="text/markdown" data-help-name="jfpdemo-validate">
+# Validate
+
+## What This Does
+Checks the incoming file against a size limit, records the outcome as a step in the
+JobFlow Pro job, and routes the message to one of two outputs.
+
+## When to Use This
+- As the model for any node whose job is to accept or reject work
+- Wherever a business rule should mark a job failed without crashing the flow
+
+## Configuration
+- **Maximum size** — files larger than this, in bytes, are rejected
+
+## Inputs
+- `msg.filepath` (String): absolute path to the file to check
+- `msg.jobflow` (Object): the job to record against
+
+## Outputs
+1. **Passed** — the file is within the limit
+2. **Rejected** — the file is over the limit
+
+## Business Failures vs Errors
+A rejected file is an expected outcome. The node records it as a job failure so it
+is visible in the dashboard, then routes the message out of the second output —
+it does not raise a Node-RED error. Only a genuine fault, such as a missing input
+file, raises an error.
+
+## Outside JobFlow Pro
+On plain Node-RED the routing works identically and nothing is recorded.
+</script>

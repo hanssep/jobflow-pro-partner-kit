@@ -1,0 +1,46 @@
+name: validate
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  manifests:
+    name: Manifests and skills
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      # No dependencies: the validator is deliberately dependency-free.
+      - run: node scripts/validate-manifests.mjs
+
+  example-node:
+    name: Example package builds and tests
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: plugins/jobflow-pro-nodes/example-node
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: npm install
+      - run: npm run build
+      # Node-RED loads a node's editor template and locales from beside the
+      # compiled .js, so a missing copy step is invisible until a partner opens
+      # an unstyled dialog full of raw i18n keys. Assert it here.
+      - name: Assets landed in dist beside the compiled JavaScript
+        run: |
+          set -e
+          for node in transform validate server-config route; do
+            dir="dist/nodes/$node"
+            test -d "$dir" || { echo "missing $dir"; exit 1; }
+            ls "$dir"/*.html >/dev/null || { echo "no editor template in $dir"; exit 1; }
+            test -d "$dir/locales/en-US" || { echo "no locales in $dir"; exit 1; }
+          done
+          echo "All four nodes have templates and locales in dist."
+      - run: npm test

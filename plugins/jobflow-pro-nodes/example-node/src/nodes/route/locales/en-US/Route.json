@@ -1,0 +1,34 @@
+{
+  "jfpdemo-route": {
+    "label": {
+      "name": "Name",
+      "rules": "Rules",
+      "rule": "Rule",
+      "sendAllMatches": "Send to every matching output"
+    },
+    "placeholder": {
+      "name": "Leave blank to use the node type",
+      "label": "Output label"
+    },
+    "operator": {
+      "equals": "equals",
+      "contains": "contains"
+    },
+    "button": {
+      "addRule": "add rule"
+    },
+    "output": {
+      "noMatch": "no match"
+    },
+    "tips": {
+      "noMatch": "Messages that match no rule are sent out the last output, \"no match\"."
+    },
+    "status": {
+      "routed": "→ __label__",
+      "noMatch": "no match"
+    },
+    "error": {
+      "routeFailed": "Routing failed"
+    }
+  }
+}

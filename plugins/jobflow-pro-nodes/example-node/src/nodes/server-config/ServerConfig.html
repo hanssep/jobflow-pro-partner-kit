@@ -1,0 +1,119 @@
+<!--
+  Editor template for jfpdemo-server-config.
+
+  This is a CONFIG node: no inputs/outputs, category 'config'. It never sits
+  on the canvas on its own — other nodes reference it through a
+  type: 'jfpdemo-server-config' field in their own defaults, picked from a
+  dropdown Node-RED builds automatically.
+-->
+<script type="text/javascript">
+  // Every node's editor script executes in the same global (window) scope as
+  // every other node's editor script loaded in this instance of the editor.
+  // A bare top-level function here can collide with one from another
+  // package that happens to pick the same name — wrapping the whole file in
+  // an IIFE keeps everything below private to this file.
+  (function () {
+    function testConnection(node, resultEl) {
+      resultEl.text(node._('jfpdemo-server-config.status.testing'));
+
+      // A relative URL here is deliberate: the editor's jQuery ajax
+      // prefilter only attaches the bearer auth token to relative URLs.
+      // A leading-slash URL, or a raw XMLHttpRequest/fetch call, would
+      // reach the route with no token and get a 401.
+      $.getJSON('jfpdemo-server-config/' + node.id + '/test')
+        .done(function (data) {
+          if (data.ok) {
+            resultEl.text(node._('jfpdemo-server-config.status.ok'));
+          } else {
+            resultEl.text(data.error || node._('jfpdemo-server-config.status.fail'));
+          }
+        })
+        .fail(function (xhr) {
+          // Per-node-id admin routes only exist once the node has been
+          // deployed — a 404 here means "not deployed yet", not "broken".
+          if (xhr.status === 404) {
+            resultEl.text(node._('jfpdemo-server-config.status.deployFirst'));
+            return;
+          }
+          resultEl.text(node._('jfpdemo-server-config.status.fail'));
+        });
+    }
+
+    RED.nodes.registerType('jfpdemo-server-config', {
+      category: 'config',
+      defaults: {
+        name: { value: '' },
+        host: { value: '', required: true },
+        port: { value: 443, required: true, validate: RED.validators.number() },
+      },
+      credentials: {
+        apiKey: { type: 'password' },
+      },
+      inputs: 0,
+      outputs: 0,
+      // Suppresses the editor's "not used by anything" warning — a config
+      // node is often created ahead of the nodes that will reference it.
+      hasUsers: false,
+      label: function () {
+        return this.name || this.host || 'server-config';
+      },
+      oneditprepare: function () {
+        const node = this;
+        const resultEl = $('#jfpdemo-server-config-test-result');
+        resultEl.text('');
+
+        $('#jfpdemo-server-config-test').on('click', function () {
+          testConnection(node, resultEl);
+        });
+      },
+    });
+  })();
+</script>
+
+<script type="text/html" data-template-name="jfpdemo-server-config">
+  <div class="form-row">
+    <label for="node-config-input-name">
+      <i class="fa fa-tag"></i> <span data-i18n="jfpdemo-server-config.label.name"></span>
+    </label>
+    <input type="text" id="node-config-input-name" data-i18n="[placeholder]jfpdemo-server-config.placeholder.name" />
+  </div>
+
+  <div class="form-row">
+    <label for="node-config-input-host">
+      <i class="fa fa-globe"></i> <span data-i18n="jfpdemo-server-config.label.host"></span>
+    </label>
+    <!--
+      Config node fields use the node-config-input- prefix, not
+      node-input- (that prefix is for regular flow nodes). Node-RED's
+      config-node edit dialog binds fields by that prefix; get it wrong and
+      the field silently fails to bind — no error in the console, the value
+      just never saves.
+    -->
+    <input type="text" id="node-config-input-host" data-i18n="[placeholder]jfpdemo-server-config.placeholder.host" />
+  </div>
+
+  <div class="form-row">
+    <label for="node-config-input-port">
+      <i class="fa fa-plug"></i> <span data-i18n="jfpdemo-server-config.label.port"></span>
+    </label>
+    <input type="text" id="node-config-input-port" style="width: 100px" />
+  </div>
+
+  <div class="form-row">
+    <label for="node-config-input-apiKey">
+      <i class="fa fa-key"></i> <span data-i18n="jfpdemo-server-config.label.apiKey"></span>
+    </label>
+    <input type="password" id="node-config-input-apiKey" data-i18n="[placeholder]jfpdemo-server-config.placeholder.apiKey" />
+  </div>
+
+  <div class="form-row">
+    <button type="button" class="red-ui-button" id="jfpdemo-server-config-test">
+      <span data-i18n="jfpdemo-server-config.button.test"></span>
+    </button>
+    <span id="jfpdemo-server-config-test-result" style="margin-left: 8px;"></span>
+  </div>
+
+  <div class="form-tips">
+    <span data-i18n="jfpdemo-server-config.tips.credentials"></span>
+  </div>
+</script>

@@ -1,0 +1,121 @@
+[
+  {
+    "id": "route-demo-tab",
+    "type": "tab",
+    "label": "Route demo",
+    "disabled": false,
+    "info": "Demonstrates jfpdemo-route: two rules match on msg.filename, a third output catches everything else.\n\nEdit the inject node's payload and re-deploy, then click inject again to see a different rule match.",
+    "env": []
+  },
+  {
+    "id": "route-demo-inject",
+    "type": "inject",
+    "z": "route-demo-tab",
+    "name": "filename",
+    "props": [{ "p": "payload" }],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "invoice-042.pdf",
+    "payloadType": "str",
+    "x": 150,
+    "y": 120,
+    "wires": [["route-demo-function"]]
+  },
+  {
+    "id": "route-demo-function",
+    "type": "function",
+    "z": "route-demo-tab",
+    "name": "set filename",
+    "func": "// Stand-in for whatever normally sets msg.filename in a real flow — a hot\n// folder or drop zone. Try editing the inject payload above to see the\n// jfpdemo-route rules below take different paths:\n//   - contains \"invoice\" -> Invoices output\n//   - contains \"proof\"   -> Proofs output\n//   - anything else      -> No match output\n\n// Mutate msg in place and return it — never `return { payload: msg.payload }`.\n// Node-RED passes msg by reference to every node on the wire; replacing it\n// with a new object here would silently drop any property an earlier node\n// attached (like msg.jobflow) that this function does not know about.\nmsg.filename = msg.payload;\nnode.status({ fill: 'blue', shape: 'dot', text: msg.filename });\nreturn msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 340,
+    "y": 120,
+    "wires": [["route-demo-route"]]
+  },
+  {
+    "id": "route-demo-route",
+    "type": "jfpdemo-route",
+    "z": "route-demo-tab",
+    "name": "route by filename",
+    "rules": [
+      {
+        "property": "filename",
+        "propertyType": "msg",
+        "operator": "contains",
+        "value": "invoice",
+        "label": "Invoices"
+      },
+      {
+        "property": "filename",
+        "propertyType": "msg",
+        "operator": "contains",
+        "value": "proof",
+        "label": "Proofs"
+      }
+    ],
+    "sendAllMatches": false,
+    "outputs": 3,
+    "x": 560,
+    "y": 120,
+    "wires": [["route-demo-debug-invoices"], ["route-demo-debug-proofs"], ["route-demo-debug-nomatch"]]
+  },
+  {
+    "id": "route-demo-debug-invoices",
+    "type": "debug",
+    "z": "route-demo-tab",
+    "name": "Invoices",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "filename",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 780,
+    "y": 80,
+    "wires": []
+  },
+  {
+    "id": "route-demo-debug-proofs",
+    "type": "debug",
+    "z": "route-demo-tab",
+    "name": "Proofs",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "filename",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 780,
+    "y": 120,
+    "wires": []
+  },
+  {
+    "id": "route-demo-debug-nomatch",
+    "type": "debug",
+    "z": "route-demo-tab",
+    "name": "No match",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "filename",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 780,
+    "y": 160,
+    "wires": []
+  }
+]

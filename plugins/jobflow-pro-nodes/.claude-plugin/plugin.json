@@ -1,0 +1,15 @@
+{
+  "name": "jobflow-pro-nodes",
+  "description": "Build Node-RED nodes that appear in the Fiery JobFlow Pro Jobs dashboard. The integration contract, Node-RED development craft, and a four-node reference package with tests.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Hans Sep",
+    "url": "https://github.com/hanssep"
+  },
+  "homepage": "https://github.com/hanssep/jobflow-pro-partner-kit",
+  "repository": "https://github.com/hanssep/jobflow-pro-partner-kit",
+  "skills": "./skills/",
+  "commands": [
+    "./commands/jfp-new-node.md"
+  ]
+}

@@ -1,0 +1,30 @@
+<script type="text/markdown" data-help-name="jfpdemo-transform">
+# Transform
+
+## What This Does
+Modifies the file on the message and records the work as a step in the JobFlow Pro
+job, so an operator opening job details sees this node ran, when, and what it produced.
+
+## When to Use This
+- Anywhere after a hot folder or drop zone has started a job
+- As the model for your own processing nodes
+
+## Configuration
+- **Appended text** — the text added to the file, standing in for real work
+
+## Inputs
+- `msg.filepath` (String): absolute path to the file to modify
+- `msg.jobflow` (Object): the job to record against, added by an upstream JobFlow Pro node
+
+## Outputs
+- `msg` unchanged, with one new step in the job's history
+
+## When the Step Appears
+Not the instant this node runs. The step is written to the job record by the next
+JobFlow Pro node that reports after this one — in practice `flow-end` at the end of
+the flow. If no JobFlow Pro node runs after this one, the step is never saved.
+
+## Outside JobFlow Pro
+On plain Node-RED the node transforms the file exactly the same way and records
+nothing.
+</script>

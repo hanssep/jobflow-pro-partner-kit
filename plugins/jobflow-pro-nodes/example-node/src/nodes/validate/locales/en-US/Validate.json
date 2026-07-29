@@ -1,0 +1,27 @@
+{
+  "jfpdemo-validate": {
+    "label": {
+      "name": "Name",
+      "maxBytes": "Maximum size"
+    },
+    "placeholder": {
+      "name": "Leave blank to use the node type",
+      "maxBytes": "1048576"
+    },
+    "output": {
+      "passed": "Passed",
+      "rejected": "Rejected"
+    },
+    "tips": {
+      "outcome": "A rejected file is routed to the second output and recorded as a job failure, without raising a node error."
+    },
+    "status": {
+      "checking": "Checking...",
+      "passed": "Passed",
+      "rejected": "Rejected"
+    },
+    "error": {
+      "checkFailed": "Validation could not run"
+    }
+  }
+}

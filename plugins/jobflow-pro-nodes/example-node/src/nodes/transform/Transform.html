@@ -1,0 +1,53 @@
+<!--
+  Editor template for jfpdemo-transform.
+
+  Conventions that make a node feel native in the JobFlow Pro editor:
+   - every visible string comes from a locale file via data-i18n, never inline text
+   - form rows use Node-RED's own .form-row / label + input structure
+   - one colour across your whole palette
+   - help lives in locales/<lang>/Transform.html, not in this file
+-->
+<script type="text/javascript">
+  // Every node's editor script executes in the same global (window) scope as
+  // every other node's editor script loaded in this instance of the editor.
+  // A bare top-level function or var here can collide with one from another
+  // package that happens to pick the same name — wrapping the whole file in
+  // an IIFE keeps everything below private to this file.
+  (function () {
+  RED.nodes.registerType('jfpdemo-transform', {
+    category: 'JFP demo',
+    color: '#007FDA',
+    defaults: {
+      name: { value: '' },
+      suffix: { value: '\n-- transformed --\n' },
+    },
+    inputs: 1,
+    outputs: 1,
+    icon: 'font-awesome/fa-magic',
+    paletteLabel: 'transform',
+    label: function () {
+      return this.name || 'transform';
+    },
+  });
+  })();
+</script>
+
+<script type="text/html" data-template-name="jfpdemo-transform">
+  <div class="form-row">
+    <label for="node-input-name">
+      <i class="fa fa-tag"></i> <span data-i18n="jfpdemo-transform.label.name"></span>
+    </label>
+    <input type="text" id="node-input-name" data-i18n="[placeholder]jfpdemo-transform.placeholder.name" />
+  </div>
+
+  <div class="form-row">
+    <label for="node-input-suffix">
+      <i class="fa fa-pencil"></i> <span data-i18n="jfpdemo-transform.label.suffix"></span>
+    </label>
+    <input type="text" id="node-input-suffix" data-i18n="[placeholder]jfpdemo-transform.placeholder.suffix" />
+  </div>
+
+  <div class="form-tips">
+    <span data-i18n="jfpdemo-transform.tips.placement"></span>
+  </div>
+</script>
