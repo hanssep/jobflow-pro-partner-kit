@@ -28,7 +28,9 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
-      - run: npm install
+      # `npm ci` installs exactly what the committed lockfile pins, so a new
+      # TypeScript release cannot turn this job red on its own.
+      - run: npm ci
       - run: npm run build
       # Node-RED loads a node's editor template and locales from beside the
       # compiled .js, so a missing copy step is invisible until a partner opens

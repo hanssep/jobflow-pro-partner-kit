@@ -27,6 +27,14 @@ The tests use Node's built-in runner, so there is nothing extra to install. They
 assert the shape of what gets written into the job history — including that the
 error field survives the `JSON.parse` the dashboard performs on it.
 
+`package-lock.json` is committed so the build is reproducible. The one
+`overrides` entry raises `jsonata`, which `@types/node-red__util` pins to a
+version carrying a high-severity advisory; the alternative npm offers is a
+downgrade to Node-RED 0.20 types. Nothing here imports `jsonata`, and the
+package publishes only `dist` and `examples`, so it never reaches your users
+either way. Drop the override once that types package updates its own
+dependency.
+
 ## Try it
 
 ```bash
