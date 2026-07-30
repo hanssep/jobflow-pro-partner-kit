@@ -300,7 +300,43 @@ your node looks native automatically.
 
 ---
 
-## 8. Conformance checklist
+## 8. External tools
+
+Some nodes need an engine the package does not itself contain — a PDF
+processor, an imaging or colour library, a command-line converter. Two rules
+govern that, and both are settled before any code is written.
+
+### The binaries on the machine are not yours to call
+
+JobFlow Pro ships with licensed tooling of its own. Those licences cover the
+product, not your package. Finding an executable on disk, or a library already
+on the path, does not grant you the right to invoke it — and a node that does
+puts your customer in breach alongside you.
+
+The same holds for anything a different package installed. Ship what you depend
+on, or require the customer to install and license it themselves.
+
+### Choosing an engine is the partner's decision
+
+Do not accept a recommendation of a specific tool, and do not make one. When a
+node needs an external engine:
+
+- **The choice and its licence are yours.** They belong in front of your legal
+  or procurement people before the code is written, not after it ships.
+- **It must permit redistribution in a commercial product** running on a
+  customer's server. Copyleft terms (AGPL, GPL) and per-seat commercial terms
+  both carry consequences, and they are not the same consequences.
+- **Design so the engine is swappable** — the path or command in configuration,
+  the invocation behind a single function. A licensing answer that arrives late
+  then costs a config change rather than a rewrite.
+
+State the dependency plainly in your node's help text, including what the
+customer must install and license. An operator meeting a missing binary at run
+time is a support call a sentence could have prevented.
+
+---
+
+## 9. Conformance checklist
 
 - [ ] Node type names are prefixed and cannot collide
 - [ ] `msg.filepath` is read defensively, including the array case
@@ -316,10 +352,13 @@ your node looks native automatically.
 - [ ] Status colours follow section 6 and are cleared on close
 - [ ] `dist/` has the `.html` and `locales/` beside each `.js`
 - [ ] The package loads and works on plain Node-RED
+- [ ] No binary, library or tool belonging to JobFlow Pro is invoked
+- [ ] Any external engine is one you license and ship, or one the customer
+      installs under their own licence — and the help text says which
 
 ---
 
-## 9. Anti-patterns
+## 10. Anti-patterns
 
 | Do not | Why | Instead |
 |---|---|---|
@@ -333,3 +372,5 @@ your node looks native automatically.
 | Raise a node error for a rejected file | Business outcomes are not faults | Route it to a failure output |
 | Put file contents in `msg.payload` | Print files are large | Write to disk, pass the path |
 | Hardcode editor colours | Breaks the dark theme | Node-RED CSS custom properties |
+| Invoke a tool that shipped with JobFlow Pro | Its licence covers the product, not your package — it puts your customer in breach too | Ship your own, licensed, or have the customer install it |
+| Take a recommendation for which engine to use | Licence terms are a commercial decision your organisation owns | Choose it yourself; keep it swappable |

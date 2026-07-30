@@ -48,6 +48,17 @@ Do not ask about anything the contract already decides: file paths travel on
 `msg.filepath`, strings live in locale files, status colours follow the table in
 the skill.
 
+**If the node needs an external engine — a PDF processor, an imaging or colour
+library, a converter — do not offer a list of candidates and do not name a
+preferred one.** Which tool, and on whose licence, is a commercial decision the
+partner's own organisation owns; presenting options reads as vetting them. Say
+that the choice and its licensing are theirs, that whatever they pick must allow
+redistribution in a commercial product on a customer's server, and that nothing
+already installed on the machine is available to call just because it is there.
+Then design so the engine is swappable — path or command in configuration, the
+invocation behind one function — and carry on with the rest of the node. See
+*External tools* in `jobflow-pro-nodes`.
+
 ## What to generate
 
 For a package that already exists, add only the node. For a new package,
@@ -101,7 +112,7 @@ rather than trusting that you followed them:
    `.html` and `locales/` beside the `.js`. Check that; a missing copy step is
    invisible until Node-RED shows an unstyled dialog with raw i18n keys.
 2. `npm test` — must pass.
-3. Walk the conformance checklist in `jobflow-pro-nodes` §8 and the craft
+3. Walk the conformance checklist in `jobflow-pro-nodes` §9 and the craft
    checklist in `jobflow-pro-node-craft` explicitly, item by item, and report
    which ones you verified versus which need a running editor to confirm.
 4. State plainly what has **not** been verified. Loading in a real Node-RED

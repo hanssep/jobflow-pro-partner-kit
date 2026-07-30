@@ -145,6 +145,11 @@ Two caveats that matter in production:
 
 ## 5. Spawning external tools
 
+**Settle which binary, and on whose licence, before writing any of this.** A
+tool already installed on the machine is not available to you merely because it
+is there — see *External tools* in the **jobflow-pro-nodes** skill. What follows
+assumes you have the right to run the thing you are spawning.
+
 The standard shape — `spawn`, accumulate output, and treat the two failure
 modes separately:
 
