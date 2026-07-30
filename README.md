@@ -17,7 +17,8 @@ release, a plugin, or a version. It works against JobFlow Pro as it ships today.
 /plugin install jobflow-pro-nodes@jobflow-pro-partner-kit
 ```
 
-Then `/jfp-new-node watermark` to scaffold a conformant node, or just describe
+Then `/jfp-new-node watermark` to scaffold a conformant node, or
+`/jfp-function-node` for the JavaScript inside a Function node. Or just describe
 what you want to build — the skills load themselves when the task calls for them.
 
 ## What you get
@@ -27,6 +28,7 @@ what you want to build — the skills load themselves when the task calls for th
 | **`jobflow-pro-nodes`** skill | The JobFlow Pro integration contract: job tracking, the step shape, the message contract, i18n, status colours, editor UI, a conformance checklist, and the anti-patterns. |
 | **`jobflow-pro-node-craft`** skill | The Node-RED craft underneath that contract — ten silent failure modes, plus reference files on runtime patterns, editor patterns, and function-node JavaScript. Standard Node-RED behaviour, verified against 4.0.9. |
 | **`/jfp-new-node`** command | Scaffolds a node from the reference package and walks both checklists. |
+| **`/jfp-function-node`** command | Writes or reviews the JavaScript inside a Function node, including how to record a job step without the helper library. |
 | **`example-node/`** | A complete, runnable package: four nodes, a zero-dependency test suite, an importable example flow, and the files you copy into your own repo. |
 
 The example package lives at
@@ -113,6 +115,7 @@ plugins/jobflow-pro-nodes/
   skills/jobflow-pro-nodes/          the integration contract
   skills/jobflow-pro-node-craft/     Node-RED craft + 3 reference files
   commands/jfp-new-node.md           the scaffold command
+  commands/jfp-function-node.md      the Function node command
   example-node/                      the runnable reference package
 scripts/validate-manifests.mjs       CI check on manifests and skills
 ```
