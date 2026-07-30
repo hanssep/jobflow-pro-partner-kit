@@ -10,8 +10,8 @@ jobs:
     name: Manifests and skills
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with:
           node-version: '20'
       # No dependencies: the validator is deliberately dependency-free.
@@ -24,8 +24,8 @@ jobs:
       run:
         working-directory: plugins/jobflow-pro-nodes/example-node
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with:
           node-version: '20'
       # `npm ci` installs exactly what the committed lockfile pins, so a new
