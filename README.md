@@ -87,6 +87,7 @@ message context carries across the boundary.
 
 ## Verified
 
+- **The plugin installs and both skills register in Claude Code** (2026-07-29)
 - The example package builds; all four nodes were exercised in a live
   Node-RED 4.0.9 editor, installed from the packed tgz: palette, edit dialogs,
   the router's rule round-trip and dynamic output count, the `examples/` flow
